@@ -1,12 +1,16 @@
-from distutils.core import setup, findpackages
+from distutils.core import setup
 
 setup(
-    name='py_project',
+    name='pyproject',
     version='1.0.0',
     description='Python WBS and Gantt tools.',
     author='Carter Mak',
     author_email='Carter.Mak@colorado.edu',
     url='https://github.com/cartermak/PyProject',
-    packages=['py_project'],
-    package_dir={'': 'lib'}
+    packages=['pyproject'],
+    package_dir={'': 'src'},
+    # install_requires=[
+    #     'plotly',
+    #     'pandas'
+    # ]
 )
