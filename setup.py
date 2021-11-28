@@ -9,8 +9,8 @@ setup(
     url='https://github.com/cartermak/PyProject',
     packages=['pyproject'],
     package_dir={'': 'src'},
-    # install_requires=[
-    #     'plotly',
-    #     'pandas'
-    # ]
+    install_requires=[
+        'matplotlib',
+        'numpy'
+    ]
 )
