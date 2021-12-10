@@ -108,26 +108,36 @@ class Category(PlanObject):
         
         return data
 
-    # def get_dims(self) -> Tuple[int,int]:
-    #     w = 0
-    #     hs = []
-    #     for c in self.children:
-    #         if isinstance(c, (Task,Milestone)):
-    #             w += 1
-    #             hs.append(1)
-    #         elif isinstance(c, Category):
-    #             c_w,c_h = c.get_dims()
-    #             w += c_w
-    #             hs.append(c_h)
-    #         else:
-    #             raise RuntimeError("Unknown child data type")
+    def get_dims(self) -> Tuple[int,int]:
+        w = 0
+        hs = []
+        n_tasks = 0
+        for c in self.children:
+            if isinstance(c, (Task,Milestone)):
+                # w += 1
+                n_tasks += 1
+            elif isinstance(c, Category):
+                c_w,c_h = c.get_dims()
+                w += c_w
+                hs.append(c_h)
+            else:
+                raise RuntimeError("Unknown child data type")
         
-    #     if hs:
-    #         height = max(hs)+1
-    #     else:
-    #         height = 1
+        if n_tasks:
+            # Add vertical stack of tasks as one vertical block
+            w += 1
+            hs.append(n_tasks) 
         
-    #     return (w,height)
+        if hs:
+            # Add 1 to account for the category itself
+            height = max(hs)+1 
+        else:
+            height = 1
+        
+        if not w:
+            w = 1
+        
+        return (w,height)
     
     def get_time_bounds(self) -> Tuple[dt.date,dt.date]:
         """Get start and end boundaries based on all children
@@ -165,7 +175,7 @@ class Category(PlanObject):
 class Project():
     def __init__(self, name: str, data: List[PlanObject] = None) -> None:
         self.name = name
-        self.root = Category('root',children=data)
+        self.root = Category(name,children=data)
         self.root.id = 0
 
     def to_dict(self):
