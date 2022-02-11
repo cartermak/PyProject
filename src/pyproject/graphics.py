@@ -47,15 +47,18 @@ class Gantt():
                 ax.scatter(r.start, idx, marker='d', color='k',
                            s=rcParams['lines.markersize']**2.5)
             for p in r.predecessors:
-                pred = rows[idx_map[p]]
-                if pred.end >= r.start:
-                    continue
+                if p in idx_map.keys():
+                    pred = rows[idx_map[p]]
+                    if pred.end >= r.start:
+                        continue
 
-                xs = [pred.end, r.start, r.start]
-                ys = [idx_map[pred.id], idx_map[pred.id], idx]
-                ax.plot(xs, ys, color="k")
-                if not isinstance(r, Milestone):
-                    ax.scatter(r.start, idx, color="k")
+                    xs = [pred.end, r.start, r.start]
+                    ys = [idx_map[pred.id], idx_map[pred.id], idx]
+                    ax.plot(xs, ys, color="k")
+                    if not isinstance(r, Milestone):
+                        ax.scatter(r.start, idx, color="k")
+                else:
+                    print("Missing Predecessor; continuing")
 
         fig.set_figheight(len(rows)*GANTT_ROW_HEIGHT)
         s, e = project.root.get_time_bounds()
